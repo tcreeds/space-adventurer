@@ -8,11 +8,11 @@
             let rollValue;
             const initialTotal = 18;
             let currentTotal = initialTotal;
-            document.getElementById("total").innerText = currentTotal;
+            //document.getElementById("total").innerText = currentTotal;
             setRollPoints(1);
 
             function setRollPoints(amount) {
-                if (amount >= 1 && amount <= currentTotal) {
+                if (amount >= 1/* && amount <= currentTotal*/) {
                     rollPoints = amount;
                     document.getElementById("rollPoints").innerText = rollPoints
                     document.getElementById("max-move").innerText = rollPoints;
@@ -21,53 +21,74 @@
                 }
             }
 
-            const onClick = () => {
-                if (currentTotal <= 0) {
+            const onClick = (e) => {
+                e.preventDefault();
+                /*if (currentTotal <= 0) {
                     return;
-                }
+                }*/
                 const random = Math.random();
                 console.log(random)
                 rollValue = Math.floor(random * (rollPoints))+1;
                 console.log("rollValue: ", rollValue)
-                currentTotal -= rollPoints;
-                console.log("currentTotal: ", currentTotal)
+                //currentTotal -= rollPoints;
+                //console.log("currentTotal: ", currentTotal)
                 document.getElementById("rollValue").innerText = rollValue;
-                document.getElementById("total").innerText = currentTotal;
-                document.getElementById("rollPoints").max = currentTotal;
-                if (currentTotal < rollPoints) {
+                //document.getElementById("total").innerText = currentTotal;
+                /*if (currentTotal < rollPoints) {
                     setRollPoints(currentTotal);
-                }
+                }*/
+                document.getElementById("btn").style.backgroundColor = "rgb(" + Math.random() * 256 + "," + Math.random() * 256 + "," + Math.random() * 256 + ")"
                 
             }
-            document.getElementById("minus-btn").addEventListener("click", (e) => setRollPoints(rollPoints-1));
-            document.getElementById("plus-btn").addEventListener("click", (e) => setRollPoints(rollPoints+1));
-            document.getElementById("btn").addEventListener("click", (e) => onClick());
+
+            const updateRollPoints = (e, newRollPoints) => {
+                e.preventDefault();
+                setRollPoints(newRollPoints);
+            }
+            document.getElementById("minus-btn").addEventListener("touchstart", (e) => updateRollPoints(e, rollPoints-1));
+            document.getElementById("minus-btn").addEventListener("click", (e) => updateRollPoints(e, rollPoints-1));
+            document.getElementById("plus-btn").addEventListener("touchstart", (e) => updateRollPoints(e, rollPoints+1));
+            document.getElementById("plus-btn").addEventListener("click", (e) => updateRollPoints(e, rollPoints+1));
+            document.getElementById("btn").addEventListener("touchstart", (e) => onClick(e));
+            document.getElementById("btn").addEventListener("click", (e) => onClick(e));
         }
     </script>
     <style>
         body {
-            font-size: 1.5em;
+            font-size: 1em;
             background-image: url("space.jpeg");
             background-size: cover;
             padding-top: 5em;
         }
         body > div {
+            font-size: 2.8em;
             background: white;
             border: 2px solid darkgray;
             border-radius: 0.5em;
-            width: 15em;
+            max-width: 15em;
+            width: 90%;
             margin: 0.5em auto;
             padding: 0.5em 0.8em;
         }
         .minus-btn {
+            font-size: 1.5em;
+            width: 1em;
+            height: 1em;
             margin: 0.3em;
             background: red;
             border-radius: 0.3em;
         }
         .plus-btn {
+            font-size: 1.5em;
+            width: 1em;
+            height: 1em;
             margin: 0.3em;
             background: green;
             border-radius: 0.3em;
+        }
+        #btn {
+
+            font-size: 1.2em;
         }
         #rollPoints {
             padding: 0.3em;
@@ -75,13 +96,13 @@
     </style>
 </head>
 <body>
-    <div>Remaining Roll Points: <span id="total"></span></div>
+    <!-- <div>Remaining Roll Points: <span id="total"></span></div> -->
     <div>
         <div>Roll points for this turn: </div>
         <div>
-            <button className="minus-btn" id="minus-btn">-</button>
+            <button class="minus-btn" id="minus-btn">-</button>
             <span id="rollPoints" type=text></span>
-            <button className="plus-btn" id="plus-btn">+</button>
+            <button class="plus-btn" id="plus-btn">+</button>
         </div>
         <div>
             Your minimum move is 1, and your maximum move is <span id="max-move"></span>
